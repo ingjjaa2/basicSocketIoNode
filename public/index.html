@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket Server</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css" integrity="sha384-DhY6onE6f3zzKbjUPRc2hOzGAdEf4/Dz+WJwBvEYL/lkkIsI3ihufq9hk9K4lVoK" crossorigin="anonymous">
+</head>
+<body class="container">
+
+    <h1 class="mt-5">Mini Chat</h1>
+    <hr>
+
+    <form id="formChat">
+        <div class="row">
+            <div class="col-8">
+                <input type="text" id="txtMensage" placeholder="Mensaje" class="form-control"/>
+            </div>
+            <div class="col-4">
+                <button class="primary"> Enviar </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <ul id="listMessages" class="mt-2">
+                    
+                </ul>
+            </div>
+
+        </div>
+    </form>
+
+
+
+
+    <script src="https://cdn.socket.io/4.2.0/socket.io.min.js" integrity="sha384-PiBR5S00EtOj2Lto9Uu81cmoyZqR57XcOna1oAuVuIEjzj0wpqDVfD0JA9eXlRsj" crossorigin="anonymous"></script>
+    
+    <script>
+        const socket = io('http://localhost:8030');
+
+        const formChat = document.querySelector('#formChat');
+        const mesage = document.querySelector('#txtMensage');
+        const listOfMessages = document.querySelector('#listMessages');
+
+        formChat.addEventListener('submit',(e)=>{
+            e.preventDefault();
+            const newMessage = mesage.value;
+            socket.emit('mesage-to-server',{msg:newMessage})
+        })
+
+        socket.on('mesage-from-server',(data)=>{
+            listOfMessages.innerHTML += `<li>${data.msg}</li>`
+        })
+    </script>
+
+
+</body>
+</html>
